@@ -1,0 +1,12 @@
+**/node_modules
+**/dist
+**/build
+.git
+.gitignore
+.shots
+*.log
+**/.env
+**/.env.local
+server/storage
+*.tsbuildinfo
+README.md
