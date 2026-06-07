@@ -10,3 +10,6 @@ server/storage/meetings.json
 coverage/
 
 *.tsbuildinfo
+
+# screenshots/artefatos locais
+.shots/
