@@ -98,6 +98,38 @@ npm test
    identificação de cada locutor.
 4. **Gerar ata** — a ata oficial é produzida e pode ser baixada em `.txt`.
 
+## Deploy (Render)
+
+O projeto já inclui `Dockerfile` e `render.yaml` (Blueprint).
+
+1. Faça o *push* deste repositório para o GitHub (já feito).
+2. No [Render](https://render.com): **New +** → **Blueprint** → selecione este
+   repositório. O Render lê o `render.yaml` e cria o serviço web automaticamente.
+3. Em **Environment**, defina os segredos (opcionais) para o modo real:
+   - `ANTHROPIC_API_KEY` — redação da ata por IA.
+   - `ASSEMBLYAI_API_KEY` — transcrição real com diarização.
+   - Sem eles, a aplicação roda em **modo demonstração**.
+4. Clique em **Apply**. Ao final, o Render fornece a URL pública
+   (ex.: `https://ata-gov.onrender.com`).
+
+O Render injeta a variável `PORT` automaticamente (a aplicação a respeita) e usa
+`/api/health` como *health check*.
+
+> **Persistência:** no plano gratuito o disco é efêmero — áudios e atas são
+> perdidos a cada novo deploy. Para mantê-los, descomente o bloco `disk:` no
+> `render.yaml` (requer plano pago) montando um disco em `/app/server/storage`.
+
+### Docker (qualquer ambiente)
+
+```bash
+docker build -t ata-gov .
+docker run -p 4000:4000 \
+  -e ANTHROPIC_API_KEY=... \
+  -e ASSEMBLYAI_API_KEY=... \
+  ata-gov
+# http://localhost:4000
+```
+
 ## Notas sobre privacidade
 
 Áudios e transcrições ficam no servidor (`server/storage/`). Ao usar provedores

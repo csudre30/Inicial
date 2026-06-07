@@ -1,0 +1,32 @@
+# Blueprint do Render — https://render.com/docs/blueprint-spec
+# Para publicar: no Render, "New +" -> "Blueprint" -> selecione este repositório.
+services:
+  - type: web
+    name: ata-gov
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    # O Render injeta a variável PORT automaticamente; a aplicação a respeita.
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      # Transcrição: "auto" usa AssemblyAI se a chave existir, senão o modo demo.
+      - key: TRANSCRIPTION_PROVIDER
+        value: auto
+      - key: TRANSCRIPTION_LANGUAGE
+        value: pt
+      - key: ANTHROPIC_MODEL
+        value: claude-opus-4-8
+      # Segredos: defina os valores no painel do Render (sync:false não versiona).
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: ASSEMBLYAI_API_KEY
+        sync: false
+
+    # Persistência (opcional): disponível em planos pagos. Descomente para que
+    # áudios e atas sobrevivam a reinícios/deploys. No plano free o disco é
+    # efêmero (os dados são perdidos a cada deploy).
+    # disk:
+    #   name: ata-storage
+    #   mountPath: /app/server/storage
+    #   sizeGB: 1
